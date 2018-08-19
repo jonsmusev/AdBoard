@@ -1,0 +1,66 @@
+p {
+  font-size: 14px;
+}
+
+.table td, .table th {
+  text-align: center;
+  width: 25%;
+}
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+html, body { height: 100%; }
+
+.page_block {
+margin: 15px 0 0;
+}
+
+.post_header_info {
+  margin-left: 65px;
+  padding-top: 8px;
+}
+
+.post_image {
+  display: block;
+  float: left;
+}
+
+.post_img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  vertical-align: top;
+}
+
+h5.post_author {
+  font-size: 13px;
+  margin: 0;
+  font-weight: 400;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+}
+
+.post_date, .post_date .post_link, .post_date .wall_text_name_explain_promoted_post {
+  color: #939393;
+}
+
+.post_date {
+  font-size: 12.5px;
+  padding-top: 3px;
+}
+
+.wall_text{
+  padding: 15px 0 0 0;
+}
+
+.ui_actions_menu_wrap {
+  cursor: pointer;
+}
+
+a {
+  color: #2a5885;
+  text-decoration: none;
+  cursor: pointer;
+}

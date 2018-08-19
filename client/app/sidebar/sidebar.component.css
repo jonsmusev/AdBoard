@@ -1,0 +1,187 @@
+.narrow_column_wrap {
+  position:relative;
+  width:230px
+}
+.narrow_column {
+  width:230px
+}
+.narrow_column.fixed {
+  z-index:2
+}
+
+.ui_rmenu {
+  padding: 6px 0;
+  position: relative;
+}
+.page_block {
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+  margin: 15px 0 0;
+}
+.ui_rmenu_item_sel, .ui_rmenu_item_sel:hover {
+  color: #000;
+  font-weight: 500;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  padding-left: 18px;
+  border-left: 2px solid #5181b8;
+}
+.ui_rmenu_item:hover, .ui_rmenu_subitem:hover, .ui_rmenu_item_sel, .ui_rmenu_item_sel:hover {
+  text-decoration: none;
+  background-color: #f0f2f5;
+}
+.ui_rmenu_item, .ui_rmenu_subitem {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 32px;
+  line-height: 31px;
+  padding: 0 5px 0 20px;
+  color: #2a5885;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  outline: none;
+  cursor: pointer;
+}
+
+#page_body {
+  font-size: 13px;
+}
+
+.search_filters_minimized.ui_rmenu_item_expanded {
+  border-radius: 2px 2px 0 0;
+}
+.search_filters_minimized {
+  padding: 10px;
+  cursor: pointer;
+}
+.page_block {
+  position: relative;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+  margin: 15px 0 0;
+}
+
+.search_filters_minimized_text {
+  padding-left: 33px;
+  background: #fff url(/images/search_integration.png) no-repeat;
+  height: 21px;
+  line-height: 20px;
+  font-size: 12.5px;
+}
+
+.search_filters_wrap {
+  margin: -1px;
+  padding: 1px;
+}
+
+.ui_filters_sibling {
+  margin-top: 1px;
+  border-radius: 0 0 2px 2px;
+}
+.ui_filters_block {
+  padding: 7px 15px 5px;
+}
+
+.search_inner_filter {
+  margin-bottom: 10px;
+}
+
+.search_control {
+  padding: 0 0 8px;
+}
+
+.selector_container {
+  background: #fff;
+}
+
+.search_filter_main, .search_filter_open, .search_filter_shut {
+  margin: 6px 0 0;
+  padding: 0 0 13px;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  color: #656565;
+  font-size: 12.5px;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+}
+
+.search_control {
+  padding: 0 0 8px;
+}
+.clear_fix {
+  display: block;
+}
+
+.search_inner_filter .range_to .dark {
+  width: 90px;
+}
+.search_inner_filter .dark, .search_inner_filter .text {
+  width: 200px;
+}
+
+input.dark {
+  height: 30px;
+}
+
+.search_inner_filter .range_sep {
+  float: left;
+  padding-top: 7px;
+  width: 19px;
+  text-align: center;
+}
+
+.search_inner_filter .range_to .dark {
+  width: 90px;
+}
+.search_inner_filter .dark, .search_inner_filter .text {
+  width: 200px;
+}
+.fakeinput.dark, .fakeinput.dark ~ .placeholder .ph_input, div[contenteditable="true"], div[contenteditable="true"] ~ .placeholder .ph_input, input.dark, input.dark ~ .placeholder .ph_input, textarea.dark, textarea.dark ~ .placeholder .ph_input {
+  padding: 5px 9px 7px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+.fakeinput, .fakeinput ~ .placeholder .ph_input, div[contenteditable="true"], div[contenteditable="true"] ~ .placeholder .ph_input, input.big_text, input.big_text ~ .placeholder .ph_input, input.dark, input.dark ~ .placeholder .ph_input, input.search, input.search ~ .placeholder .ph_input, input.text, input.text ~ .placeholder .ph_input, textarea, textarea ~ .placeholder .ph_input {
+  color: #000;
+  padding: 3px 5px;
+  margin: 0;
+  border: 1px solid #d3d9de;
+  font-size: 13px;
+}
+
+.big.selector_container.selector_focused table.selector_table {
+  border-radius: 2px 2px 0 0;
+}
+.big.selector_container table.selector_table {
+  border-radius: 2px;
+}
+.selector_focused table.selector_table {
+  border-color: #c9d0d6;
+}
+.selector_container table.selector_table {
+  width: 100%;
+  z-index: 0;
+  border: 1px solid #d3d9de;
+  margin: 0;
+}
+
+#page_body {
+  font-size: 13px;
+}

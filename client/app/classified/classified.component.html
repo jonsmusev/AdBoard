@@ -1,0 +1,183 @@
+<app-loading [condition]="isLoading"></app-loading>
+
+<app-toast [message]="toast.message"></app-toast>
+
+<div class="row col-md-9">
+
+  <div class="card" *ngIf="!isEditing">
+    <h4 class="card-header">Добавить объявление</h4>
+    <div class="card-block">
+      <form class="form-inline" [formGroup]="addClassifiedForm" (ngSubmit)="addClassified()" style="text-align:center">
+        <div class="form-group">
+          <input class="form-control" type="text" name="title" formControlName="title" placeholder="Заголовок">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="description" formControlName="description" placeholder="Текст объявления">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="number" name="price" formControlName="price" placeholder="Цена" step="any" min="0">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="category" formControlName="category" placeholder="категория">
+        </div>
+        <h3>Select files</h3>
+
+        <div ng2FileDrop
+             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader"
+             class="well my-drop-zone">
+          Base drop zone
+        </div>
+        Multiple
+        <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
+        <h3>Upload queue</h3>
+        <p>Queue length: {{ uploader?.queue?.length }}</p>
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th width="50%">Name</th>
+            <th>Size</th>
+            <th>Progress</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of uploader.queue">
+            <td><strong>{{ item?.file?.name }}</strong></td>
+            <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+            <td *ngIf="uploader.isHTML5">
+              <div class="progress" style="margin-bottom: 0;">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+              </div>
+            </td>
+            <td class="text-center">
+              <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+              <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+              <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+            </td>
+            <td nowrap>
+              <button type="button" class="btn btn-success btn-xs"
+                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                <span class="glyphicon glyphicon-upload"></span> Upload
+              </button>
+              <button type="button" class="btn btn-warning btn-xs"
+                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+              </button>
+              <button type="button" class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                <span class="glyphicon glyphicon-trash"></span> Remove
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div>
+          <div>
+            Queue progress:
+            <div class="progress" style="">
+              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success btn-s"
+                  (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+            <span class="glyphicon glyphicon-upload"></span> Upload all
+          </button>
+          <button type="button" class="btn btn-warning btn-s"
+                  (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+            <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+          </button>
+          <button type="button" class="btn btn-danger btn-s"
+                  (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+            <span class="glyphicon glyphicon-trash"></span> Remove all
+          </button>
+        </div>
+        <button class="btn btn-primary" type="submit"><i class="fa fa-floppy-o"></i> Добавить</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- проверка связи с сайдбаром !-->
+  <div class="card-block">
+    <div class="card">
+      <p>{{sidebarState.hh}}</p>
+      <p>{{sidebarState.city}}</p>
+    </div>
+  </div>
+
+
+  <!-- Блок с объявлениями !-->
+  <div class="card-block">
+    <tbody *ngIf="!isEditing">
+    <ul class="list-group" *ngFor="let classified of classifieds | orderBy: 'timestamp': true">
+      <div class="list-group-item clearfix page_block">
+        <div class="_post_content">
+          <div class="post_header">
+            <a class="post_image" href=#>
+              <img src="images/ava1.jpg" class="post_img" height="50" width="50">
+            </a>
+            <div class="post_header_info">
+              <h5 class="post_author">{{classified.category}}</h5>
+              <div class="post_date">{{classified.timestamp | niceDateFormatPipe}}</div>
+            </div>
+          </div>
+          <div class="post_content">
+            <div class="wall_text">
+            <a class="post_description" href="#">{{classified.title}}</a>
+            <p>{{classified.description}}</p>
+            <p>Цена: {{classified.price}} грн.</p>
+            <img src="uploads/{{classified.filename}}" />
+            </div>
+            <td>
+              <button class="btn btn-sm btn-warning" (click)="enableEditing(classified)"><i class="fa fa-pencil"></i> Edit</button>
+              <button class="btn btn-sm btn-danger" (click)="deleteClassified(classified)"><i class="fa fa-trash"></i> Delete</button>
+            </td>
+          </div>
+        </div>
+      </div>
+    </ul>
+    </tbody>
+    <tbody *ngIf="isEditing">
+    <tr>
+      <td colspan="4">
+        <form class="form-inline" #form="ngForm" (ngSubmit)="editClassified(classified)" style="display:inline">
+          <div class="form-group">
+            <input class="form-control" type="text" name="title" [(ngModel)]="classified.title" placeholder="Title" required>
+          </div>
+          <div class="form-group">
+            <input class="form-control" type="number" name="price" [(ngModel)]="classified.price" placeholder="Price" min="0" required>
+          </div>
+          <div class="form-group">
+            <input class="form-control" type="text" name="description" [(ngModel)]="classified.description" placeholder="Description" step="any" min="0" required>
+          </div>
+          <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid"><i class="fa fa-floppy-o"></i> Save</button>
+        </form>
+        <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancel</button>
+        <img src="uploads/{{classified.filename}}" />
+      </td>
+    </tr>
+    </tbody>
+  </div>
+
+  <!-- Блок поиска !-->
+  <button class="btn btn-sm" (click)="searchClassifieds()" class="btn btn-default">Submit</button>
+
+  <div>
+    <form class="form-inline" [formGroup]="searchClassifiedsForm" (ngSubmit)="searchClassifieds()">
+      <div class="form-group">
+        <input class="form-control" type="text" name="searchRequest" formControlName="searchRequest" placeholder="Search">
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+  </div>
+
+</div>
+
+<!-- right sidebar -->
+<div class="col-md-3">
+  <app-sidebar></app-sidebar>
+</div>

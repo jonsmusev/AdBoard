@@ -1,0 +1,100 @@
+<div class="card ">
+  <ul class="chat_list col-md-4">
+    <li class="chat_conversation">
+      <a  (click)="dialogSelect(1)">
+        <div class="chat_member_avatar"><img src="images/ava1.jpg" class="post_img" height="50" width="50"></div>
+        <div class="chat_member_name"><span>Иван Иванов</span></div>
+        <div class="chat_message_date"><p>31 марта</p></div>
+        <div class="chat_message_preview"><p>Тема сообщения</p></div>
+      </a>
+    </li>
+    <li class="chat_conversation">
+      <a  (click)="dialogSelect(2)">
+        <div class="chat_member_avatar"><img src="images/ava2.jpg" class="post_img" height="50" width="50"></div>
+        <div class="chat_member_name"><span>Петр Петров</span></div>
+        <div class="chat_message_date"><p>30 марта</p></div>
+        <div class="chat_message_preview"><p>Вам письмо</p></div>
+      </a>
+    </li>
+    <li class="chat_conversation">
+      <a  (click)="dialogSelect(3)">
+        <div class="chat_member_avatar"><img src="images/ava3.jpg" class="post_img" height="50" width="50"></div>
+        <div class="chat_member_name"><span>Николай Николаев</span></div>
+        <div class="chat_message_date"><p>6 марта</p></div>
+        <div class="chat_message_preview"><p>Вот вам там хорошо</p></div>
+      </a>
+    </li>
+    <li class="chat_conversation">
+      <a  (click)="dialogSelect(4)">
+        <div class="chat_member_avatar"><img src="images/ava4.jpg" class="post_img" height="50" width="50"></div>
+        <div class="chat_member_name"><span>Сидор Сидоров</span></div>
+        <div class="chat_message_date"><p>31 марта</p></div>
+        <div class="chat_message_preview"><p>такое вот сообщение</p></div>
+      </a>
+    </li>
+    <li class="chat_conversation">
+      <a  (click)="dialogSelect(5)">
+        <div class="chat_member_avatar"><img src="images/ava5.jpg" class="post_img" height="50" width="50"></div>
+        <div class="chat_member_name"><span>Валентин Валентинов</span></div>
+        <div class="chat_message_date"><p>17 февраля</p></div>
+        <div class="chat_message_preview"><p>Декларация Новой почты</p></div>
+      </a>
+    </li>
+  </ul>
+  <div class="chat_window col-md-8">
+    <ul id="messages" *ngFor="let message of messages">
+      <p>{{message.senderId}}</p>
+      <p>{{message.timestamp}}</p>
+      <p>{{message.messageContent}}</p>
+    </ul>
+    <div>
+      <input id="m" ng-model="message" autocomplete="off" />
+      <button (ngSubmit)="sendMessage()">Send</button>
+    </div>
+    <div>
+      <form class="form-inline" [formGroup]="sendMessageForm" (ngSubmit)="sendMessage()">
+        <div class="form-group">
+          <input class="form-control" type="text" name="sendMessage" formControlName="sendMessageControl" placeholder="Message">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- // Message mod 2
+<div class="chat-container">
+  <mat-card class="main-card">
+    <mat-list class="chat-list">
+      <mat-list-item *ngFor="let message of messages" [ngClass]="[(message.action === undefined && message.from.id === user.id)? 'chat-list-item': '']">
+        <img mat-list-avatar *ngIf="message.action === undefined" [src]="message.from.avatar">
+        <h4 mat-line *ngIf="message.action === undefined">
+          <b>{{message.from.name}}</b>
+        </h4>
+        <p mat-line *ngIf="message.action === undefined">
+          <span> {{message.content}} </span>
+        </p>
+        <p mat-line *ngIf="message.action === action.JOINED" class="chat-notification">
+          <span> <b>{{message.from.name}}</b> joined to the conversation. </span>
+        </p>
+        <p mat-line *ngIf="message.action === action.RENAME" class="chat-notification">
+          <span> <b>{{message.content.previousUsername}}</b> is now <b>{{message.content.username}}</b> </span>
+        </p>
+      </mat-list-item>
+    </mat-list>
+    <div class="chat-footer-container">
+      <mat-icon>message</mat-icon>
+      <mat-form-field class="chat-input">
+        <input matInput
+               #inputMessage
+               maxlength="140"
+               placeholder="Type your message"
+               [(ngModel)]="messageContent"
+               (keyup.enter)="sendMessage(messageContent)">
+        <mat-hint align="end">{{inputMessage.value.length}}/140</mat-hint>
+      </mat-form-field>
+    </div>
+  </mat-card>
+</div>
+-->
