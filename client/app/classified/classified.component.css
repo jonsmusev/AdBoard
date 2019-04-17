@@ -53,6 +53,8 @@ h5.post_author {
 
 .wall_text{
   padding: 15px 0 0 0;
+  word-wrap: break-word;
+  width: 535px;
 }
 
 .ui_actions_menu_wrap {
@@ -63,4 +65,108 @@ a {
   color: #2a5885;
   text-decoration: none;
   cursor: pointer;
+}
+
+#ad_content_text {
+  -moz-appearance: textfield-multiline;
+  -webkit-appearance: textarea;
+  border: 1px solid gray;
+  font: medium -moz-fixed;
+  font: -webkit-small-control;
+  height: 28px;
+  overflow: auto;
+  padding: 2px;
+  resize: both;
+  width: 400px;
+}
+
+/*  Facebook form  */
+
+.facebook-share-box {
+  width: 100%;
+}
+.facebook-share-box .share {
+  -webkit-transition: 0.1s ease-out height;
+  -moz-transition: 0.1s ease-out height;
+  -ms-transition: 0.1s ease-out height;
+  -o-transition: 0.1s ease-out height;
+  transition: 0.1s ease-out height;
+  clear: both;
+  background: white;
+  border: 2px solid #dddddd;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.facebook-share-box .share .arrow {
+  background: no-repeat #dddddd;
+  position: absolute;
+  width: 14px;
+  height: 10px;
+  left: 4px;
+  display: inline;
+  top: -10px;
+  -webkit-transition: 0.3s ease-out all;
+  -moz-transition: 0.3s ease-out all;
+  -ms-transition: 0.3s ease-out all;
+  -o-transition: 0.3s ease-out all;
+  transition: 0.3s ease-out all;
+}
+
+.facebook-share-box .post-types li a {
+  color: #085083;
+  text-decoration: none;
+}
+
+.facebook-share-box .post-types li a.active {
+  color: #404040;
+}
+
+.facebook-share-box .post-types {
+  padding-left: 5px;
+}
+
+.facebook-share-box ul {
+  list-style: none;
+  margin-bottom: 9px;
+}
+
+.facebook-share-box .post-types li {
+  display: inline;
+  margin-right: 10px;
+}
+
+.message {
+  border-radius: 0;
+  border: none;
+}
+.panel {
+  border-radius: 0;
+  border: none;
+  margin-bottom: 0;
+}
+
+.privacy-dropdown {
+  width: 200px;
+}
+
+
+a.disabled {
+  pointer-events: none; /* делаем ссылку некликабельной */
+  cursor: default;  /* устанавливаем курсор в виде стрелки */
+  color: #999; /* цвет текста для нективной ссылки */
+}
+
+.col-sm-5cols{
+  position: relative;
+  min-height: 1px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .col-sm-5cols {
+    width: 20%;
+    float: left;
+  }
 }

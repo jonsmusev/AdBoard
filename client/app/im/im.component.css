@@ -74,7 +74,6 @@
   text-overflow: ellipsis;
   overflow: hidden;
   padding-bottom: 1px;
-  padding: 5px 0;
   position: relative;
   font-size: 15px;
 }
@@ -101,4 +100,10 @@
   float: right;
 }
 
+.chat_messages {
+  list-style: none;
+}
 
+.chat_message_content {
+
+}

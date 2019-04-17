@@ -9,16 +9,18 @@
     <div class="card-block">
       <form class="form-inline" [formGroup]="addClassifiedForm" (ngSubmit)="addClassified()" style="text-align:center">
         <div class="form-group">
-          <input class="form-control" type="text" name="title" formControlName="title" placeholder="Заголовок">
+          <!-- <div class="form-control" contenteditable="true" formControlName="description" placeholder="Текст объявления" name="description" cols="40" rows="5"></div> !-->
+          <!-- <textarea class="form-control" formControlName="description" placeholder="Текст объявления" name="description" cols="40" rows="5"></textarea> -->
+          <input class="form-control" type="text" name="classifiedContent" formControlName="classifiedContent" placeholder="Текст объявления">
         </div>
         <div class="form-group">
-          <input class="form-control" type="text" name="description" formControlName="description" placeholder="Текст объявления">
+          <input class="form-control" type="text" name="classifiedTitle" formControlName="classifiedTitle" placeholder="Короткое описание">
         </div>
         <div class="form-group">
-          <input class="form-control" type="number" name="price" formControlName="price" placeholder="Цена" step="any" min="0">
+          <input class="form-control" type="number" name="classifiedPrice" formControlName="classifiedPrice" placeholder="Цена" step="any" min="0">
         </div>
         <div class="form-group">
-          <input class="form-control" type="text" name="category" formControlName="category" placeholder="категория">
+          <input class="form-control" type="text" name="classifiedCategoryId" formControlName="classifiedCategoryId" placeholder="категория">
         </div>
         <h3>Select files</h3>
 
@@ -100,80 +102,235 @@
     </div>
   </div>
 
-
-  <!-- проверка связи с сайдбаром !-->
-  <div class="card-block">
-    <div class="card">
-      <p>{{sidebarState.hh}}</p>
-      <p>{{sidebarState.city}}</p>
+  <!-- публикация в стиле фейсбук !-->
+  <div class="container">
+    <div class="row">
+      <div class="">
+        <form class="form-inline facebook-share-box" [formGroup]="addClassifiedForm" (ngSubmit)="addClassified()" method="post" role="form" enctype="multipart/form-data">
+          <div class="share"
+               ng2FileDrop
+               [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+               (fileOver)="fileOverBase($event)"
+               [uploader]="uploader"
+               >
+            <div class="arrow"></div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <ul class="post-types">
+                  <li class="post-type">
+                    <a class="disabled" title="" href="#"><i class="fa fa-file"></i> Быстрая публикация</a>
+                  </li>
+                  <li class="post-type">
+                    <a class="disabled" href="#"><i class="fa fa-camera"></i> Расширенный режим</a>
+                  </li>
+                  <a class="disabled" title="" href="#"><i class="fa fa-close"></i> Закрыть</a>
+                </ul>
+              </div>
+              <div class="panel-body">
+                <div class="col-md-2">
+                  <img class="chat_member_avatar" src="images/ava1.jpg">
+                </div>
+                <div class="col-md-10">
+                  <textarea name="message" cols="65" rows="10" formControlName="classifiedContent" id="status_message" class="form-control message" style="height: 62px; overflow: hidden;" placeholder="Текст объявления"></textarea>
+                </div>
+              </div>
+              <tbody>
+              <!-- блок с картинками -->
+              <div [dragula]='"bag-task1"' *ngFor="let thumbnail of uploadedImagesThumbnails">
+                <div class="col-xs-6 col-md-3 col-sm-5cols">
+                  <a href="#" class="thumbnail">
+                    <img src="uploads/{{thumbnail}}" thumbnail alt="..." />
+                  </a>
+                </div>
+              </div>
+              </tbody>
+              <div>
+                <div class="form-group input-group">
+                  <span class="input-group-addon" id="">Цена</span>
+                  <input class="form-control" type="number" name="classifiedPrice" formControlName="classifiedPrice" placeholder="Цена" step="any" min="0">
+                </div>
+                <div class="form-group input-group">
+                  <span class="input-group-addon" id="">Категория</span>
+                  <input class="form-control" type="text" name="classifiedCategoryId" formControlName="classifiedCategoryId" placeholder="категория">              </div>
+              </div>
+            <div class="panel-footer">
+              <div class="row">
+                <div class="">
+                  <div class="form-group">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default"><i class="icon icon-map-marker"></i> Location</button>
+                      <button type="button"  class="btn btn-default"><i class="icon icon-picture"></i> Photo</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="">
+                  <div class="form-group">
+                    <span class="pull-left">Таргетинг:</span>
+                    <select name="privacy" class="form-control disabled privacy-dropdown pull-left input-sm">
+                      <option value="1" selected="selected">Вся Украина</option>
+                      <option value="2">Мой город</option>
+                      <option value="3">Только я</option>
+                    </select>
+                    <button class="btn btn-primary pull-right" type="submit"><i class="fa fa-floppy-o"></i>Опубликовать</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      </form>
     </div>
   </div>
+</div>
 
+<!-- Блок с объявлениями !-->
+<div class="card-block">
+  <tbody *ngIf="!isEditing">
+  <ul class="list-group" *ngFor="let classified of classifieds | orderBy: 'timestamp': true; let index = index">
 
-  <!-- Блок с объявлениями !-->
-  <div class="card-block">
-    <tbody *ngIf="!isEditing">
-    <ul class="list-group" *ngFor="let classified of classifieds | orderBy: 'timestamp': true">
-      <div class="list-group-item clearfix page_block">
-        <div class="_post_content">
-          <div class="post_header">
-            <a class="post_image" href=#>
-              <img src="images/ava1.jpg" class="post_img" height="50" width="50">
-            </a>
-            <div class="post_header_info">
-              <h5 class="post_author">{{classified.category}}</h5>
-              <div class="post_date">{{classified.timestamp | niceDateFormatPipe}}</div>
-            </div>
-          </div>
-          <div class="post_content">
-            <div class="wall_text">
-            <a class="post_description" href="#">{{classified.title}}</a>
-            <p>{{classified.description}}</p>
-            <p>Цена: {{classified.price}} грн.</p>
-            <img src="uploads/{{classified.filename}}" />
-            </div>
-            <td>
-              <button class="btn btn-sm btn-warning" (click)="enableEditing(classified)"><i class="fa fa-pencil"></i> Edit</button>
-              <button class="btn btn-sm btn-danger" (click)="deleteClassified(classified)"><i class="fa fa-trash"></i> Delete</button>
-            </td>
-          </div>
+    <!-- Валенки !-->
+    <div class="list-group-item clearfix page_block">
+      <div class="_post_content">
+      <div class="post_header">
+        <a class="post_image" href=#>
+          <img src="images/valenok.jpg" class="post_img" height="50" width="50">
+        </a>
+        <div class="post_header_info">
+          <h5 class="post_author"><a class="post_description" href="#">Валенки</a></h5>
+          <div class="post_date">17:15 <i class="fa fa-map-marker"></i> Днепропетровск</div>
+        </div>
+        <div class="" id="" style="background-image: url(/images/C73Q-9GuUHR.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -5px -157px;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+        position: absolute;
+            right: 0;
+    top: 0;
+">
+          <a aria-label="Параметры новостей" data-testid="post_chevron_button" class="" aria-haspopup="true" aria-expanded="false" rel="toggle" href="#" role="button" id="u_fetchstream_20_2r" aria-controls="post_menu"></a>
         </div>
       </div>
-    </ul>
-    </tbody>
-    <tbody *ngIf="isEditing">
-    <tr>
-      <td colspan="4">
-        <form class="form-inline" #form="ngForm" (ngSubmit)="editClassified(classified)" style="display:inline">
-          <div class="form-group">
-            <input class="form-control" type="text" name="title" [(ngModel)]="classified.title" placeholder="Title" required>
-          </div>
-          <div class="form-group">
-            <input class="form-control" type="number" name="price" [(ngModel)]="classified.price" placeholder="Price" min="0" required>
-          </div>
-          <div class="form-group">
-            <input class="form-control" type="text" name="description" [(ngModel)]="classified.description" placeholder="Description" step="any" min="0" required>
-          </div>
-          <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid"><i class="fa fa-floppy-o"></i> Save</button>
-        </form>
-        <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancel</button>
-        <img src="uploads/{{classified.filename}}" />
-      </td>
-    </tr>
-    </tbody>
-  </div>
-
-  <!-- Блок поиска !-->
-  <button class="btn btn-sm" (click)="searchClassifieds()" class="btn btn-default">Submit</button>
-
-  <div>
-    <form class="form-inline" [formGroup]="searchClassifiedsForm" (ngSubmit)="searchClassifieds()">
-      <div class="form-group">
-        <input class="form-control" type="text" name="searchRequest" formControlName="searchRequest" placeholder="Search">
+      <div class="post_content">
+        <div class="wall_text">
+          <a class="post_description" href="#">Продам валенки из овечьей шерсти</a>
+          <p>Ва́ленки — тёплые войлочные сапоги из свалянной овечьей шерсти; чаще делаются твёрдыми, но бывают и мягкими, под другую обувь. Валенки — традиционная обувь народов Евразии, которая используется для ходьбы по сухому снегу. Для замедления снашивания валенки подшивают кожаной или резиновой подошвой или носят с галошами.</p>
+          <p>Цена: 1200 грн.</p>
+          <img src="images/valenok.jpg" height="500" width="500" />
+        </div>
+        <div>
+          <a href=#><i class="fa fa-user"></i> Василий Петрович</a>
+          <button class="btn btn-sm" type="submit" value="1">
+            <i class="fa fa-telegram" aria-hidden="true"></i>Написать продавцу
+          </button>
+        </div>
+        <td>
+          <button class="btn btn-sm btn-warning" (click)="enableEditing(classified)"><i class="fa fa-pencil"></i> Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteClassified(classified)"><i class="fa fa-trash"></i> Delete</button>
+        </td>
       </div>
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-  </div>
+    </div>
+    </div>
+
+    <!-- Объявление !-->
+    <div class="list-group-item clearfix page_block">
+      <div class="_post_content">
+        <div class="post_header">
+          <a class="post_image" href=#>
+            <img src="images/ava1.jpg" class="post_img" height="50" width="50">
+          </a>
+          <div class="post_header_info">
+            <h5 class="post_author">{{classified.classifiedCategoryId}}</h5>
+            <div class="post_date">
+              {{classified.classifiedTimestamp | niceDateFormatPipe}}
+              <i class="fa fa-map-marker"></i> Харьков
+            </div>
+            <div class="" id="" style="background-image: url(/images/C73Q-9GuUHR.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -5px -157px;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 0;
+">
+              <a aria-label="Параметры новостей" (click)="classified.menuState = !classified.menuState" data-testid="post_chevron_button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" rel="toggle" role="button" id="u_fetchstream_20_2r" aria-controls="post_menu" ngbDropdownToggle>Кнопка</a>
+              <div class="dropdown-menu" [class.show]="classified.menuState" id="dropdown{{index}}">
+                <button class="btn btn-sm btn-warning" (click)="enableEditing(classified)"><i class="fa fa-pencil"></i> Edit</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteClassified(classified)"><i class="fa fa-trash"></i> Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="post_content">
+          <div class="wall_text">
+            <a class="post_description" href="#">{{classified.classifiedTitle}}</a>
+            <p>{{classified.classifiedContent}}</p>
+            <p>Цена: {{classified.classifiedPrice}} грн.</p>
+            <img src="uploads/{{classified.classifiedMedia}}" height="500" width="500"/>
+          </div>
+          <div>
+              <a href=#><i class="fa fa-user"></i> Василий Петрович</a>
+            <span>
+              <button class="btn btn-sm pull-right" type="submit" value="1">
+                <i class="fa fa-telegram" aria-hidden="true"></i>Написать продавцу
+              </button>
+            </span>
+            </div>
+          <td>
+            <button class="btn btn-sm btn-warning" (click)="enableEditing(classified)"><i class="fa fa-pencil"></i> Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteClassified(classified)"><i class="fa fa-trash"></i> Delete</button>
+          </td>
+        </div>
+      </div>
+    </div>
+  </ul>
+  </tbody>
+
+  <!-- Редактировнаие !-->
+  <tbody *ngIf="isEditing">
+  <tr>
+    <td colspan="4">
+      <form class="form-inline" #form="ngForm" (ngSubmit)="editClassified(classified)" style="display:inline">
+        <div class="form-group">
+          <input class="form-control" type="text" name="title" [(ngModel)]="classified.classifiedTitle" placeholder="Title" required>
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="number" name="price" [(ngModel)]="classified.classifiedPrice" placeholder="Price" min="0" required>
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" name="description" [(ngModel)]="classified.classifiedContent" placeholder="Description" step="any" min="0" required>
+        </div>
+        <button class="btn btn-sm btn-primary" type="submit" [disabled]="!form.form.valid"><i class="fa fa-floppy-o"></i> Save</button>
+      </form>
+      <button class="btn btn-sm btn-warning" (click)="cancelEditing()"><i class="fa fa-times"></i> Cancel</button>
+      <img src="uploads/{{classified.classifiedMedia}}" />
+      <div>
+        <a href=#><i class="fa fa-user"></i> Василий Петрович</a>
+        <button class="btn btn-sm" type="submit" value="1">
+          <i class="fa fa-telegram" aria-hidden="true"></i>Написать продавцу
+        </button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</div>
+
+<!-- Блок поиска !-->
+<button class="btn btn-sm" (click)="searchClassifieds()" class="btn btn-default">Submit</button>
+
+<div>
+  <form class="form-inline" [formGroup]="searchClassifiedsForm" (ngSubmit)="searchClassifieds()">
+    <div class="form-group">
+      <input class="form-control" type="text" name="searchRequest" formControlName="searchRequest" placeholder="Search">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
 
 </div>
 

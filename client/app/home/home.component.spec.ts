@@ -29,4 +29,8 @@ describe('Component: Home', () => {
     expect(el.textContent).toContain('Home');
   });
 
+  it('should display the string "Добавить объявление" in h4', () => {
+    const el = fixture.debugElement.query(By.css('h4')).nativeElement;
+    expect(el.textContent).toContain('Добавить объявление');
+  });
 });

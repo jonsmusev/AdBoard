@@ -1,12 +1,37 @@
 <nav class="navbar navbar-dark bg-primary">
   <div class="nav navbar-nav">
-    <a routerLink="/" class="nav-item nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+    <a class="nav-item nav-link">
+      <i class="fa fa-bars" aria-hidden="true"></i>
+    </a>
+    <a class="navbar-brand" href="#">
+      <img alt="Brand" src="/images/Brand_logo.png">
+    </a>
+    <a class="navbar-brand" href="#">OnForo</a>
+    <form class="navbar-form navbar-left" role="search">
+      <div class="form-group input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </button>
+      </span>
+        <input type="text" class="form-control" placeholder="Search">
+        <span class="input-group-btn">
+        <button class="btn btn-default" type="button">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+      </span>
+      </div>
+    </form>
+    <a routerLink="/"
+       class="nav-item nav-link"
+       routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact:true}">
       <i class="fa fa-home"></i> H
     </a>
-    <a routerLink="/classified" class="nav-item nav-link" routerLinkActive="active">
-      <i class="fa fa-list"></i> Объявления
+    <a routerLink="/chat" class="nav-item nav-link" routerLinkActive="active">
+      <i class="fa fa-list"></i> Тест-Чат
     </a>
-    <a routerLink="/im" class="nav-item nav-link" routerLinkActive="active">
+    <a routerLink="/im" class="nav-item nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
       <i class="fa fa-send"></i> Сообщения
     </a>
     <a routerLink="/login" class="nav-item nav-link" routerLinkActive="active" *ngIf="!auth.loggedIn">
@@ -15,15 +40,27 @@
     <a routerLink="/register" class="nav-item nav-link" routerLinkActive="active" *ngIf="!auth.loggedIn">
       <i class="fa fa-user-plus"></i> Регистрация
     </a>
-    <a routerLink="/account" class="nav-item nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
-      <i class="fa fa-user"></i> Account ({{auth.currentUser.username}})
-    </a>
     <a routerLink="/admin" class="nav-item nav-link" routerLinkActive="active" *ngIf="auth.loggedIn && auth.isAdmin">
       <i class="fa fa-lock"></i> Admin
     </a>
-    <a routerLink="/logout" class="nav-item nav-link" routerLinkActive="active" *ngIf="auth.loggedIn">
-      <i class="fa fa-sign-out"></i> Выход
-    </a>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+        <a href="#" class="nav-item nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account ({{auth.currentUser.username}})<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a routerLink="/account" class="" routerLinkActive="active" *ngIf="auth.loggedIn">
+            <i class="fa fa-user"></i>Мой профиль
+          </a></li>
+          <li><a href="#">Another action</a></li>
+          <li><a href="#">Something else here</a></li>
+          <li role="separator" class="divider"></li>
+          <li>
+            <a routerLink="/logout" class="" routerLinkActive="active" *ngIf="auth.loggedIn">
+            <i class="fa fa-sign-out"></i> Выход
+          </a></li>
+        </ul>
+      </li>
+    </ul>
+
   </div>
 
 </nav>

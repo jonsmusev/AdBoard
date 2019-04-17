@@ -1,60 +1,69 @@
 <div class="card ">
-  <ul class="chat_list col-md-4">
-    <li class="chat_conversation">
-      <a  (click)="dialogSelect(1)">
-        <div class="chat_member_avatar"><img src="images/ava1.jpg" class="post_img" height="50" width="50"></div>
-        <div class="chat_member_name"><span>Иван Иванов</span></div>
-        <div class="chat_message_date"><p>31 марта</p></div>
-        <div class="chat_message_preview"><p>Тема сообщения</p></div>
-      </a>
-    </li>
-    <li class="chat_conversation">
-      <a  (click)="dialogSelect(2)">
-        <div class="chat_member_avatar"><img src="images/ava2.jpg" class="post_img" height="50" width="50"></div>
-        <div class="chat_member_name"><span>Петр Петров</span></div>
-        <div class="chat_message_date"><p>30 марта</p></div>
-        <div class="chat_message_preview"><p>Вам письмо</p></div>
-      </a>
-    </li>
-    <li class="chat_conversation">
-      <a  (click)="dialogSelect(3)">
-        <div class="chat_member_avatar"><img src="images/ava3.jpg" class="post_img" height="50" width="50"></div>
-        <div class="chat_member_name"><span>Николай Николаев</span></div>
-        <div class="chat_message_date"><p>6 марта</p></div>
-        <div class="chat_message_preview"><p>Вот вам там хорошо</p></div>
-      </a>
-    </li>
-    <li class="chat_conversation">
-      <a  (click)="dialogSelect(4)">
-        <div class="chat_member_avatar"><img src="images/ava4.jpg" class="post_img" height="50" width="50"></div>
-        <div class="chat_member_name"><span>Сидор Сидоров</span></div>
-        <div class="chat_message_date"><p>31 марта</p></div>
-        <div class="chat_message_preview"><p>такое вот сообщение</p></div>
-      </a>
-    </li>
-    <li class="chat_conversation">
-      <a  (click)="dialogSelect(5)">
-        <div class="chat_member_avatar"><img src="images/ava5.jpg" class="post_img" height="50" width="50"></div>
-        <div class="chat_member_name"><span>Валентин Валентинов</span></div>
-        <div class="chat_message_date"><p>17 февраля</p></div>
-        <div class="chat_message_preview"><p>Декларация Новой почты</p></div>
-      </a>
-    </li>
-  </ul>
-  <div class="chat_window col-md-8">
-    <ul id="messages" *ngFor="let message of messages">
-      <p>{{message.senderId}}</p>
-      <p>{{message.timestamp}}</p>
-      <p>{{message.messageContent}}</p>
-    </ul>
+  <div class="col-md-4">
     <div>
-      <input id="m" ng-model="message" autocomplete="off" />
-      <button (ngSubmit)="sendMessage()">Send</button>
+      <input type="text" name="usersSearch" (click)="newConversationSearch()"  placeholder="Поиск...">
+      <button class="btn btn-sm btn-success" *ngIf="!hideConversations" (click)="newConversationButton()">New</button>
+      <button class="btn btn-sm btn-danger" *ngIf="hideConversations" (click)="newConversationCancel()">Cancel</button>
     </div>
+    <ul class="chat_list" *ngIf="!hideConversations">
+      <!-- Хардкод -->
+      <li class="chat_conversation">
+        <a  (click)="dialogSelect(1)">
+          <div class="chat_member_avatar"><img src="images/ava0.jpg" class="post_img" height="50" width="50"></div>
+          <div class="chat_member_name"><span>Иван Иванов</span></div>
+          <div class="chat_message_date"><p>31 марта</p></div>
+          <div class="chat_message_preview"><p>Тема сообщения</p></div>
+        </a>
+      </li>
+      <li class="chat_conversation">
+        <a  (click)="dialogSelect(2)">
+          <div class="chat_member_avatar"><img src="images/ava0.jpg" class="post_img" height="50" width="50"></div>
+          <div class="chat_member_name"><span>Петр Петров</span></div>
+          <div class="chat_message_date"><p>30 марта</p></div>
+          <div class="chat_message_preview"><p>Вам письмо</p></div>
+        </a>
+      </li>
+    </ul>
+    <div *ngIf="hideConversations">
+    <ul class="chat_list"  *ngFor="let user of users">
+      <li class="chat_conversation">
+        <a  (click)="newConversationStart(user._id)">
+         <div class="chat_member_avatar"><img src="images/{{user._id}}.jpg" class="post_img" height="50" width="50"></div>
+         <div class="chat_member_name"><span>{{user.username}}</span></div>
+        </a>
+      </li>
+    </ul>
+    </div>
+    <!-- Список диалогов -->
+    <ul class="chat_list" *ngFor="let conversation of conversations; let i = index">
+      <li class="chat_conversation">
+        <a  (click)="dialogSelect(conversation.targetId, i)">
+          <div class="chat_member_avatar"><img src="images/{{conversation.targetId}}.jpg" class="post_img" height="50" width="50"></div>
+          <div class="chat_member_name"><span>{{conversation.targetName}}</span></div>
+          <div class="chat_message_date" *ngIf="conversation.lastMessage !== undefined"
+          ><p>{{conversation.lastMessage.timestamp | niceDateFormatPipe}}</p></div>
+          <div class="chat_message_preview" *ngIf="conversation.lastMessage !== undefined"><p>{{conversation.lastMessage.messageContent}}</p></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Список сообщений -->
+  <div class="chat_window col-md-8">
     <div>
-      <form class="form-inline" [formGroup]="sendMessageForm" (ngSubmit)="sendMessage()">
+      <ul id="messages" *ngFor="let message of messages ">
+        <li class="chat_messages">
+          <div class="chat_member_avatar"><img src="images/{{message.senderId}}.jpg" class="post_img" height="50" width="50"></div>
+          <div class="chat_member_name"><p>{{message.senderName}}</p></div>
+          <div class="chat_message_date"><p>{{message.timestamp | date }}</p></div>
+          <div class="chat_message_content"><p>{{message.messageContent}}</p></div>
+       </li>
+      </ul>
+    </div>
+    <!-- Форма отправки сообщений -->
+    <div>
+      <form class="form-inline" [formGroup]="sendMessageForm" (ngSubmit)="sendMessage(); sendMessageForm.reset()">
         <div class="form-group">
-          <input class="form-control" type="text" name="sendMessage" formControlName="sendMessageControl" placeholder="Message">
+          <input class="form-control" type="text" name="sendMessage" formControlName="messageContent" placeholder="Message">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>

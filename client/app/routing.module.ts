@@ -9,13 +9,15 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { AccountComponent } from './account/account.component';
 import { AdminComponent } from './admin/admin.component';
+import { ChatComponent} from "./chat/chat.component";
 
 import { AuthGuardLogin } from './services/auth-guard-login.service';
 import { AuthGuardAdmin } from './services/auth-guard-admin.service';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'classified', component: ClassifiedComponent },
+  { path: 'chat', component: ChatComponent },
+  { path: 'home', component: HomeComponent },
+  { path: '', component: ClassifiedComponent },
   { path: 'im', component: ImComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },

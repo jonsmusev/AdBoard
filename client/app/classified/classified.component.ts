@@ -10,7 +10,6 @@ import { AuthService } from '../services/auth.service';
 import {niceDateFormatPipe} from '../pipes/niceDateFormatPipe.pipe';
 import { SidebarService} from '../services/sidebar.service';
 
-
 const URL = 'http://127.0.0.1:3000/api/files';
 
 
@@ -21,6 +20,7 @@ const URL = 'http://127.0.0.1:3000/api/files';
 })
 export class ClassifiedComponent implements OnInit {
 
+  uploadedImagesThumbnails = [];
   sidebarState = {};
   classified = {};
   classifieds = [];
@@ -30,13 +30,20 @@ export class ClassifiedComponent implements OnInit {
 
   addClassifiedForm: FormGroup;
   searchClassifiedsForm: FormGroup;
-  searchRequest = new FormControl();
-  title = new FormControl('', Validators.required);
-  description = new FormControl('', Validators.required);
-  category = new FormControl ('');
+  searchRequest = new FormControl(" ");
+  classifiedTitle = new FormControl('', Validators.required);
+  classifiedContent = new FormControl('', Validators.required);
+  classifiedCategoryId = new FormControl ('');
   filename = new FormControl();
   timestamp = new FormControl('', Validators.required);
-  price = new FormControl('', Validators.required);
+  classifiedPrice = new FormControl('', Validators.required);
+  value = new FormControl('', Validators.required);
+  url = new FormControl('', Validators.required);
+  geotag = new FormControl('', Validators.required);
+
+  menuState = false;
+
+
 
   public uploader: FileUploader = new FileUploader({url: URL});
   public hasBaseDropZoneOver = false;
@@ -57,12 +64,15 @@ export class ClassifiedComponent implements OnInit {
     this.getClassifieds();
     this.addClassifiedForm = this.formBuilder.group({
       userId: this.auth.currentUser._id,
-      title: this.title,
-      category: this.category,
-      description: this.description,
-      filename: this.filename,
-      timestamp: Date.now(),
-      price: this.price
+      classifiedTitle: this.classifiedTitle,
+      classifiedCategoryId: this.classifiedCategoryId,
+      classifiedContent: this.classifiedContent,
+      classifiedMedia: this.filename,
+      classifiedTimestamp: Date.now(),
+      classifiedValue: this.value,
+      classifiedPrice: this.classifiedPrice,
+      classifiedUrl: this.url,
+      classifiedGeotag: this.geotag,
   });
     this.sidebarData.currentSidebarState.subscribe(sidebarState => {
       this.sidebarState = sidebarState;
@@ -75,6 +85,7 @@ export class ClassifiedComponent implements OnInit {
     this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
       console.log('Item uploaded successfully' + response);
       this.filename.setValue(response);
+      this.uploadedImagesThumbnails.push(response);
     };
   }
 
@@ -148,7 +159,6 @@ export class ClassifiedComponent implements OnInit {
     this.classifiedService.filterClassifieds(this.sidebarState).subscribe(
       data => this.classifieds = data
     );
-    console.log(this.sidebarState);
   }
 
 }

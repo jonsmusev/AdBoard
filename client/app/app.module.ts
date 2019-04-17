@@ -27,6 +27,14 @@ import { niceDateFormatPipe} from './pipes/niceDateFormatPipe.pipe';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SidebarService} from "./services/sidebar.service";
 import { ImComponent } from './im/im.component';
+import { HttpClientModule } from "@angular/common/http";
+import { ThumbnailDirective } from './thumbnail.directive';
+import { DragulaModule } from 'ng2-dragula';
+import { ChatComponent } from './chat/chat.component';
+import { ChatService } from "./services/chat.service";
+import { ImService } from "./services/im.service";
+import { WebsocketService } from "./services/websocket.service";
+
 
 @NgModule({
   declarations: [
@@ -44,14 +52,18 @@ import { ImComponent } from './im/im.component';
     OrderPipe,
     niceDateFormatPipe,
     SidebarComponent,
-    ImComponent
+    ImComponent,
+    ThumbnailDirective,
+    ChatComponent,
   ],
   imports: [
     RoutingModule,
     BrowserModule,
     FormsModule,
     HttpModule,
-    SharedModule
+    HttpClientModule,
+    SharedModule,
+    DragulaModule,
   ],
   providers: [
     AuthService,
@@ -59,7 +71,10 @@ import { ImComponent } from './im/im.component';
     AuthGuardAdmin,
     ClassifiedService,
     UserService,
-    SidebarService
+    SidebarService,
+    ChatService,
+    ImService,
+    WebsocketService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]

@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 
+import {HttpParams, HttpClient} from "@angular/common/http";
+
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -9,8 +12,12 @@ export class UserService {
 
   private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
   private options = new RequestOptions({ headers: this.headers });
+  private params = new HttpParams();
 
-  constructor(private http: Http) { }
+  constructor(
+    private http: Http,
+    private httpClient: HttpClient
+  ) { }
 
   register(user): Observable<any> {
     return this.http.post('/api/user', JSON.stringify(user), this.options);
@@ -45,12 +52,23 @@ export class UserService {
   }
 
   // chat services
-    sendMessage(messageContent): Observable<any> {
+  sendMessage(messageContent): Observable<any> {
     return this.http.post('/api/im', JSON.stringify(messageContent), this.options);
   }
 
-    getMessages(dialog): Observable<any> {
-    return this.http.get(`/api/im/${dialog}`).map(res => res.json());
+  getMessages(dialog): Observable<any> {
+    return this.http.get(`/api/im2/${dialog}`).map(res => res.json());
+  }
+
+  newConversationStart(userId1, userId2) : Observable<any>{
+    this.params = this.params.set("userId1", userId1);
+    this.params = this.params.set("userId2", userId2);
+    return this.httpClient.get(`/api/im/new`, {params:this.params});
+  }
+
+  getConversations(userId): Observable<any> {
+    this.params = this.params.set("userId", userId);
+    return this.httpClient.get(`/api/im2`, {params:this.params});
   }
 
 }
