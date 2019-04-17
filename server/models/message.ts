@@ -1,13 +1,16 @@
 import * as mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema({
-  conversationId: String,
-  messageId: String,
-  timestamp: Date,
-  isRead: Boolean,
-  messageContent: String,
+
   senderId: String,
-  receiverId: String
+  receiverId: String,
+
+  isRead: Boolean,
+
+  timestamp: Date,
+  messageContent: String,
+  mediaContent: {},
+
 });
 
 const Message = mongoose.model('Message', messageSchema);

@@ -5,7 +5,13 @@ const userSchema = new mongoose.Schema({
   username: String,
   email: { type: String, unique: true, lowercase: true, trim: true },
   password: String,
-  role: String
+  role: String,
+
+  avatar: String,
+  displayName: String,
+  phoneNumber: String,
+  address: String,
+  status: String,
 });
 
 // Before saving the user, hash the password

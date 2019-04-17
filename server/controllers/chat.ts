@@ -1,6 +1,7 @@
 import Conversation from '../models/conversation';
 import Message from '../models/message';
 import User from '../models/user';
+import Conversation1 from '../models/conversation1'
 
 export default class ChatController {
 
@@ -55,7 +56,6 @@ export default class ChatController {
           res.send({ error: err });
           return next(err);
         }
-
         return res.status(200).json({ conversation: messages });
       });
   };
@@ -118,23 +118,21 @@ export default class ChatController {
       return res.status(200).json({ message: 'Reply successfully sent!' });
     });
   };
-  
+
   //
   //
   // *** Тестовый блок ***
   //
   //
-  
+
   // Тестовое сообщение, отправка
-    sendTestMessage = function (req, res, next) {
+  sendTestMessage = function (req, res, next) {
     const reply = new Message({
-      conversationId: 'conversationId',
-      messageId: 'meaasgeId',
-      timestamp: req.body.timestamp,
+      senderId: req.body.senderId,
+      receiverId: req.body.receiverId,
       isRead: 'true',
-      messageContent: req.body.sendMessageControl,
-      senderId: req.body.user,
-      receiverId: 'receiverId'
+      timestamp: req.body.timestamp,
+      messageContent: req.body.messageContent,
     });
 
     reply.save((err, sentReply) => {
@@ -142,13 +140,93 @@ export default class ChatController {
         res.send({ error: err });
         return next(err);
       }
+
+
+
+      /*Conversation1.findOneAndUpdate(
+        {targetId : "5bb38b927dc3870287fed262"},
+        {$set: {lastMessage:
+              {messageContent: 'записано в базу с сервера',
+                senderId: 'user',
+                timestamp: '1542499004524'}
+        }},
+        function (err, doc) {
+          if (err) {
+            res.send({ error: err });
+            return next(err);
+          }
+        }
+        );*/
+
+      console.log("попытка записать в бд сообщение: " + reply);
+      //console.log("попытка записать в диалог: " + req.body.conversationId);
       return res.status(200).json({ message: 'Reply successfully sent!' });
     });
+
+
+    Conversation1.findOneAndUpdate(
+    {
+      hostId : req.body.senderId,
+      targetId : req.body.receiverId,
+     },
+     {
+       hostId : req.body.senderId,
+       targetId : req.body.receiverId,
+       lastMessage: reply,
+       unreadCount: 0,
+     },
+     {
+       upsert: true
+     },
+      function (err, conversation) {
+        if (err) {res.send({ error: err }); return next(err);}
+        /*
+        conversation.lastMessage = reply;
+        conversation.save(function (err, doc) {
+          if (err) {
+            res.send({ error: err });
+            return next(err);
+          }
+        });
+        */
+        //console.log('В БД записан диалог ' + conversation);
+      });
+
+    Conversation1.findOneAndUpdate(
+      {
+        targetId : req.body.senderId,
+        hostId : req.body.receiverId
+      },
+      {
+        hostId : req.body.receiverId,
+        targetId : req.body.senderId,
+        lastMessage: reply,
+        $inc: {
+          unreadCount: 1,
+        }
+      },
+      {
+        upsert: true
+      },
+      function (err, conversation) {
+        if (err) {res.send({ error: err }); return next(err);}
+        /*
+        conversation.lastMessage = reply;
+        conversation.save(function (err, doc) {
+          if (err) {
+            res.send({ error: err });
+            return next(err);
+          }
+        });
+        */
+        //console.log('В БД записан зеркальный диалог ' + conversation);
+      });
+
   };
 
   // Тестовый диалог, получение
   getTestConversation = function (req, res, next) {
-    Message.find({ conversationId: 'conversationId' })
+    Message.find({ conversationId: req.params.conversationId })
       .select('timestamp messageContent senderId')
       .sort('-timestamp')
       .populate({
@@ -160,9 +238,114 @@ export default class ChatController {
           res.send({ error: err });
           return next(err);
         }
-
+        console.log(messages);
         return res.status(200).json({ conversation: messages });
       });
   };
 
+  getTestNewConversation = function (req, res,next) {
+    Conversation.find({ participants: { "$all": [req.query.userId1, req.query.userId2]} })
+      .exec ((err, conversation) => {
+        if (err) {
+          res.send({ error: err });
+          return next(err);
+        }
+        //Проверка существует ли диалог
+        if (conversation != "") {
+          Message.find({ conversationId: conversation[0]._id })
+            .select('timestamp messageContent senderId conversationId')
+            .sort('-timestamp')
+            .exec((err, messages) => {
+              if (err) {
+                console.log({error: err});
+                return (err);
+              }
+              console.log('getMessages returned ' + messages);
+              return res.status(200).json({conversation: messages, conversationId: conversation[0]._id });
+            })
+        }else {
+          console.log('Диалог не существует');
+          const conversation = new Conversation({
+            participants: [req.query.userId1, req.query.userId2]
+          });
+
+          conversation.save((err, newConversation) => {
+            if (err) {
+              res.send({error: err});
+              return next(err);
+            }
+            console.log('Диалог создан' + newConversation);
+            return res.status(200).json({conversationId: newConversation._id});
+          })
+        }
+      })
+  }
+
+  getTestConversations = function (req, res, next) {
+    // Only return one message from each conversation to display as snippet
+    Conversation.find({ participants: req.query.userId })
+//      .select('participants')
+      .populate('user')
+      .exec((err, conversations) => {
+        if (err) {
+          res.send({ error: err });
+          return next(err);
+        }
+
+        // Set up empty array to hold conversations + most recent message
+        console.log(conversations);
+        const fullConversations = [];
+        conversations.forEach((conversation, i=0) => {
+          let sender = {};
+          conversation.participants.forEach((participant) => {
+            if (participant != req.query.userId && participant !== undefined) {
+              sender = ( participant );
+              console.log ('username changed to' + sender);
+            }
+          });
+          Message.find({ conversationId: conversation._id })
+            .sort('-timestamp')
+            .limit(1)
+            .populate({
+              path: 'user',
+              select: 'username'
+            })
+            .exec((err, message) => {
+              if (err) {
+                res.send({ error: err });
+                return next(err);
+              }
+              if (message.length != 0) {
+                message[0].senderId = sender;
+                console.log(message[0]);
+                fullConversations.push(message[0]);
+              }
+              i++;
+              if (i === conversations.length) {
+                return res.status(200).json({ conversations: fullConversations });
+              }
+            });
+        });
+      });
+  };
+
+  async getMessages(hostId, targetId) {
+    console.log('ChatController.getMessages received ' + targetId);
+    //return ['хуй'];
+
+    return await Message.find({ $or: [ {senderId: targetId, receiverId: hostId}, {senderId: hostId, receiverId: targetId}]})
+      .select('timestamp messageContent senderId')
+      .sort('timestamp')
+      .exec((err, messages) => {
+        if (err) {
+          console.log({error: err});
+          return (err);
+        }
+        //console.log('getMessages returned ' + messages);
+        //return ['хуй'];
+      });
+
+  }
+
 }
+

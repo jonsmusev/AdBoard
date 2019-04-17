@@ -2,9 +2,9 @@ import * as dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
 
 import User from '../models/user';
-import BaseCtrl from './base';
+import BaseController from './base';
 
-export default class UserCtrl extends BaseCtrl {
+export default class UserController extends BaseController {
   model = User;
 
   login = (req, res) => {

@@ -1,4 +1,4 @@
-abstract class BaseCtrl {
+abstract class BaseController {
 
   abstract model: any;
 
@@ -56,6 +56,23 @@ abstract class BaseCtrl {
       res.sendStatus(200);
     });
   }
+
+  search = (req, res) => {
+    this.model.find({ $text: { $search: req.params.search} }, (err, docs) => {
+      if (err) { return console.error(err); }
+      res.json(docs);
+    });
+    console.log(req.params);
+  }
+
+  filter = (req, res) => {
+    this.model.find({ category: req.params.filter }, (err, docs) => {
+      if (err) { return console.error(err); }
+      res.json(docs);
+    });
+    console.log(req.params);
+  }
+
 }
 
-export default BaseCtrl;
+export default BaseController;

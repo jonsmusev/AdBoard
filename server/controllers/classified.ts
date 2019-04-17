@@ -1,6 +1,6 @@
-import Cat from '../models/cat';
-import BaseCtrl from './base';
+import Classified from '../models/classified';
+import BaseController from './base';
 
-export default class CatCtrl extends BaseCtrl {
-  model = Cat;
+export default class ClassifiedController extends BaseController {
+  model = Classified;
 }
